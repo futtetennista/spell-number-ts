@@ -1,19 +1,35 @@
-import express from "express";
+import e from "express"
 
-const app = express();
+type Result<T> = {
+  data?: T,
+  error?: string,
+}
 
-app.get("/translate", (req, res) => {
-  const inputQ = req.query;
-  const input = parseInt(inputQ["input"] as string);
-  const inputParsed = parseNumber(input);
-  // console.log(inputParsed)
-  const inputTranslated = translateInput(inputParsed);
-  // console.log(inputTranslated)
-  res.send(inputTranslated);
-});
+const validate = (low: number, up: number, query: string): string | number => {
+  const input = parseInt(query)
+  if (isNaN(input)) {
+    return `${query} is not a number.`
+  }
+  if (input < low || input > up) {
+    return `Input ${input} is not within allowed range [${low}, ${up}]`
+  }
+  return input
+}
 
-export const runServer = (port: number) => app.listen(port);
-export default runServer;
+export const translate = (low: number, up: number, query: string, debug?: boolean): Result<string> => {
+  const validation = validate(low, up, query)
+  if (typeof validation === 'string') {
+    return { error: validation }
+  } else {
+    const inputParsed = parseNumber(validation);
+    if (debug) {
+      console.log(inputParsed)
+    }
+    return { data : translateInput(inputParsed) }
+  }
+}
+
+export default translate
 
 const powersOfTen: Array<number> = [4, 3, 2, 1];
 
