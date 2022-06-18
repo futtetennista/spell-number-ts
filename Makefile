@@ -1,7 +1,10 @@
 SHELL=/bin/bash
 ARCHIVE_NAME=stefano-home-task
 
-.PHONY: start test format compress
+.PHONY: start test format compress remove-archive build-image
+
+build-image:
+	docker build -t $(IMAGE_TAG) .
 
 start:
 	docker run --rm --name signal-ai -it -v `pwd`:/app -p 3000:3000 -w /app node:18-slim yarn start
