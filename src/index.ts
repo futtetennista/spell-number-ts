@@ -1,19 +1,22 @@
-import express, { Express, Request, Response} from "express";
+import express, { Express, Request, Response } from "express";
 
 // https://github.com/nodejs/node/issues/32103#issuecomment-595806356
-import translate from "../lib/app.js"
+import translate from "../lib/app.js";
 
-const port = parseInt(process.env.PORT?? "3000")
+const port = parseInt(process.env.PORT ?? "3000");
 
 const app: Express = express();
 
 app.get("/translate", (req: Request, res: Response) => {
   const inputQ = req.query;
-  const { data, error } = translate(1, 1000, inputQ["q"] as string);
-  if (error) {
-      res.status(400).send(error)
-  } else {
-      res.status(200).send(data)
+  const result = translate({ low: 1, up: 1000 }, inputQ["q"] as string);
+  switch (result.type) {
+    case "error":
+      res.status(400).send(result.error);
+      break;
+    case "success":
+      res.status(200).send(result.content);
+      break;
   }
 });
 

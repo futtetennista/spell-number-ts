@@ -1,31 +1,28 @@
-import e from "express"
+type Result<T> =
+  | { type: "success", content: T }
+  | { type: "error", error: string }
 
-type Result<T> = {
-  data?: T,
-  error?: string,
-}
-
-const validate = (low: number, up: number, query: string): string | number => {
+const validate = (range: {low: number, up: number}, query: string): string | number => {
   const input = parseInt(query)
   if (isNaN(input)) {
     return `${query} is not a number.`
   }
-  if (input < low || input > up) {
-    return `Input ${input} is not within allowed range [${low}, ${up}]`
+  if (input <= range.low || input >= range.up + 1) {
+    return `Input ${input} is not within allowed range [${range.low}, ${range.up}]`
   }
   return input
 }
 
-export const translate = (low: number, up: number, query: string, debug?: boolean): Result<string> => {
-  const validation = validate(low, up, query)
+export const translate = (range: { low: number, up: number }, query: string, debug?: boolean): Result<string> => {
+  const validation = validate(range, query)
   if (typeof validation === 'string') {
-    return { error: validation }
+    return { type:"error", error: validation }
   } else {
     const inputParsed = parseNumber(validation);
     if (debug) {
       console.log(inputParsed)
     }
-    return { data : translateInput(inputParsed) }
+    return { type: "success", content: translateInput(inputParsed) }
   }
 }
 
@@ -34,7 +31,9 @@ export default translate
 const powersOfTen: Array<number> = [4, 3, 2, 1];
 
 type UnitsRange = typeof powersOfTen[number];
+
 type Units = "unit" | "tens" | "hundreds" | "thousands";
+
 const powerOfTenToUnit: { readonly [key in UnitsRange]: Units } = {
   1: "unit",
   2: "tens",
@@ -59,10 +58,10 @@ const translateInput = (input: Array<ParsedInput>): string =>
   input
     .filter((x) => (x.units !== "unit" ? x.digit !== 0 : true))
     .reduceRight(
-      (acc: string, x: ParsedInput, i: number, arr: Array<ParsedInput>) =>
+      (acc: string, x: ParsedInput, idx: number, arr: Array<ParsedInput>) =>
         dispatch(
           x,
-          i + 1 < arr.length ? arr[i + 1] : emptyParsedInput,
+          idx + 1 < arr.length ? arr[idx + 1] : emptyParsedInput,
           acc,
           arr.length == 1
         ),
