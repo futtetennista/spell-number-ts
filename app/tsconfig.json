@@ -7,21 +7,27 @@
       "lib": [
         "esnext"
       ],
-      "allowJs": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
+
       "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "noFallthroughCasesInSwitch": true,
+      "outDir": "dist",
       "module": "esnext",
       "moduleResolution": "node",
+
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "noFallthroughCasesInSwitch": true,
       "resolveJsonModule": true,
       "isolatedModules": true,
       "sourceMap": true,
-      "outDir": "dist",
+      "noImplicitAny": true,
+
+      "noImplicitReturns": true
     },
     "include": [
-      "src"
-    ]
+      "src",
+    ],
+    "exclude": ["node_modules", "**/*.spec.ts"]
   }

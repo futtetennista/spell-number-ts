@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 
 // https://github.com/nodejs/node/issues/32103#issuecomment-595806356
-import translate from "../lib/app.js";
+import translate from "../src/app.js";
 
 const port = parseInt(process.env.PORT ?? "3000");
 

@@ -1,32 +1,39 @@
 type Result<T> =
-  | { type: "success", content: T }
-  | { type: "error", error: string }
+  | { type: "success"; content: T }
+  | { type: "error"; error: string };
 
-const validate = (range: {low: number, up: number}, query: string): string | number => {
-  const input = parseInt(query)
+const validate = (
+  range: { low: number; up: number },
+  query: string
+): string | number => {
+  const input = parseInt(query);
   if (isNaN(input)) {
-    return `${query} is not a number.`
+    return `${query} is not a number.`;
   }
   if (input <= range.low || input >= range.up + 1) {
-    return `Input ${input} is not within allowed range [${range.low}, ${range.up}]`
+    return `Input ${input} is not within allowed range [${range.low}, ${range.up}]`;
   }
-  return input
-}
+  return input;
+};
 
-export const translate = (range: { low: number, up: number }, query: string, debug?: boolean): Result<string> => {
-  const validation = validate(range, query)
-  if (typeof validation === 'string') {
-    return { type:"error", error: validation }
+export const translate = (
+  range: { low: number; up: number },
+  query: string,
+  debug?: boolean
+): Result<string> => {
+  const validation = validate(range, query);
+  if (typeof validation === "string") {
+    return { type: "error", error: validation };
   } else {
     const inputParsed = parseNumber(validation);
     if (debug) {
-      console.log(inputParsed)
+      console.log(inputParsed);
     }
-    return { type: "success", content: translateInput(inputParsed) }
+    return { type: "success", content: translateInput(inputParsed) };
   }
-}
+};
 
-export default translate
+export default translate;
 
 const powersOfTen: Array<number> = [4, 3, 2, 1];
 
