@@ -14,7 +14,7 @@ Run `yarn build` from the root of the project. This compiles the typescript file
 them in the folder with the `Dockerfile`. Now build the docker image either manually
 
 ```bash
-$ docker build -t <image-tag> pulumi/app
+$ docker build -t <image-tag> docker
 ```
 
 or using pulumi (see below). To create a container and send requests simply run
@@ -39,7 +39,6 @@ See also: https://hub.docker.com/r/amazon/aws-lambda-nodejs.
 ```bash
 # In the root folder of the project
 $ yarn build
-$ cd pulumi
 $ pulumi up
 >>> Please choose a stack, or create a new one: signal
 >>> Previewing update (signal)

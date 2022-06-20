@@ -1,20 +1,24 @@
 {
   "private": true,
   "workspaces": [
-    "app",
-    "pulumi"
+    "app"
   ],
   "packageManager": "yarn@3.2.1",
   "dependencies": {
+    "@pulumi/aws": "^5.0.0",
+    "@pulumi/awsx": "^0.40.0",
+    "@pulumi/pulumi": "^3.0.0",
     "eslint": "^8.18.0",
     "prettier": "^2.6.2",
     "typescript": "^4.4.2"
   },
   "devDependencies": {
+    "@types/node": "^16",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0"
   },
   "scripts": {
-    "build": "yarn workspace app build && cp app/dist/*.js pulumi/app/"
+    "format": "prettier --write '**/*.{ts,tsx}'",
+    "build": "yarn workspace app build && cp app/dist/*.js aws/"
   }
 }
