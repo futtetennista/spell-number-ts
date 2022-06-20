@@ -1,40 +1,20 @@
 {
-    "name": "personify",
-    "version": "0.1.0",
-    "private": true,
-    "main": "dist/src/index.js",
-    "type": "module",
-    "scripts": {
-        "start:docker": "format && tsc && node dist/index.js",
-        "start": "tsc && node dist/src/index.js",
-        "lint": "eslint . --ext .ts",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx}'",
-        "format:test": "prettier --check 'src/**/*.{ts,tsx,js,jsx}'"
-    },
-    "dependencies": {
-        "express": "4.17.1",
-        "prettier": "^2.6.2",
-        "typescript": "^4.4.2"
-    },
-    "devDependencies": {
-        "@types/express": "^4.17.13",
-        "@types/node": "^16.7.13",
-        "@types/express": "4.17.1",
-        "@typescript-eslint/eslint-plugin": "^5.28.0",
-        "@typescript-eslint/parser": "^5.28.0",
-        "eslint": "^8.18.0"
-    },
-    "config": {
-        "port": "3000"
-    },
-    "keywords": [
-        "signal-ai",
-        "home-task"
-    ],
-    "author": {
-        "name": "Stefano",
-        "email": "futtetennista@pm.me",
-        "url": "https://github.com/users/futtetennista"
-    }
+  "private": true,
+  "workspaces": [
+    "app",
+    "pulumi"
+  ],
+  "packageManager": "yarn@3.2.1",
+  "dependencies": {
+    "eslint": "^8.18.0",
+    "prettier": "^2.6.2",
+    "typescript": "^4.4.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0"
+  },
+  "scripts": {
+    "build": "yarn workspace app build && cp app/dist/*.js pulumi/app/"
+  }
 }
