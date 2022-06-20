@@ -11,4 +11,5 @@ bin
 !.yarn/sdks
 !.yarn/versions
 pulumi/.envrc
+pulumi/app/*.js
 .vscode

@@ -1,0 +1,6 @@
+name: home-task
+runtime:
+  name: nodejs
+  options:
+    typescript: true
+description: Signal Home Task
