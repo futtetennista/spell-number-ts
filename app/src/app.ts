@@ -10,7 +10,7 @@ const validate = (
   if (isNaN(input)) {
     return `${query} is not a number.`;
   }
-  if (input <= range.low || input >= range.up + 1) {
+  if (input < range.low || input > range.up) {
     return `Input ${input} is not within allowed range [${range.low}, ${range.up}]`;
   }
   return input;

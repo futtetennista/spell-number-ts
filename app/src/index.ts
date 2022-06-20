@@ -1,23 +1,25 @@
+import { APIGatewayEvent, Context, Callback, ProxyResult } from "aws-lambda";
+
 // https://github.com/nodejs/node/issues/32103#issuecomment-595806356
 import translate from "./app.js";
-import { APIGatewayEvent, Context } from "aws-lambda";
 
 // The event type if the lambda is not behind an API gateway
 type RawEvent = { number: string | number };
 
+// The payload in the event is different depending on how the lambda is configured
 const getInput = (
   event: RawEvent | APIGatewayEvent
 ): number | string | null => {
+  // version is an attribute of the `ProxyResult` type
   if ("version" in event) {
     const apiGatewayEvent = event as APIGatewayEvent;
     if (apiGatewayEvent.body === null) {
       return null;
     } else {
-      return JSON.parse(
-        apiGatewayEvent.isBase64Encoded
-          ? Buffer.from(apiGatewayEvent.body, "base64").toString()
-          : apiGatewayEvent.body
-      ).number;
+      const body = apiGatewayEvent.isBase64Encoded
+        ? Buffer.from(apiGatewayEvent.body, "base64").toString()
+        : apiGatewayEvent.body;
+      return body === "" ? null : JSON.parse(body).number;
     }
   } else {
     return (event as RawEvent).number;
@@ -27,7 +29,7 @@ const getInput = (
 export const handler = (
   event: RawEvent | APIGatewayEvent,
   _context: Context,
-  callback: any
+  callback: Callback<ProxyResult | null>
 ): void => {
   console.log("EVENT");
   for (let k in event as any) {
@@ -35,19 +37,20 @@ export const handler = (
   }
   const input = getInput(event);
   if (input === null) {
-    const error = {
+    const response = {
       statusCode: 400,
-      headers: JSON.stringify({ "Content-Type": "application/json" }),
-      body: "Please provide a number between [1, 1000]",
+      body: JSON.stringify({
+        message: "Please provide a number between [1, 1000]",
+      }),
     };
-    callback(error, null);
+    callback(null, response);
   } else {
     const result = translate({ low: 1, up: 1000 }, input.toString());
     switch (result.type) {
       case "error": {
         const response = {
           statusCode: 400,
-          body: result.error,
+          body: JSON.stringify({ message: result.error }),
         };
         callback(null, response);
         break;
@@ -55,7 +58,7 @@ export const handler = (
       case "success": {
         const response = {
           statusCode: 200,
-          body: result.content,
+          body: JSON.stringify({ result: result.content }),
         };
         callback(null, response);
         break;
