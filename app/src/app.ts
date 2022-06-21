@@ -16,7 +16,7 @@ const validate = (
   return input;
 };
 
-export const translate = (
+export const spellNumber = (
   range: { low: number; up: number },
   query: string,
   debug?: boolean
@@ -29,11 +29,11 @@ export const translate = (
     if (debug) {
       console.log(inputParsed);
     }
-    return { type: "success", content: translateInput(inputParsed) };
+    return { type: "success", content: spellNumberInternal(inputParsed) };
   }
 };
 
-export default translate;
+export default spellNumber;
 
 const powersOfTen: Array<number> = [4, 3, 2, 1];
 
@@ -61,7 +61,7 @@ const emptyParsedInput: ParsedInput = { digit: 0, units: "unit" };
 const parseNumber = (x: number): Array<ParsedInput> =>
   powersOfTen.map((i: number) => getUnit(x, i));
 
-const translateInput = (input: Array<ParsedInput>): string =>
+const spellNumberInternal = (input: Array<ParsedInput>): string =>
   input
     .filter((x) => (x.units !== "unit" ? x.digit !== 0 : true))
     .reduceRight(
@@ -84,16 +84,15 @@ const dispatch = (
   // console.log(current, prev, acc)
   switch (current.units) {
     case "unit":
-      return translateUnit(current.digit, showZero);
+      return spellUnit(current.digit, showZero);
     case "tens":
-      // return /* current.digit === 0 ? acc : */ translateTens(
-      return translateTens(current.digit, previous.digit);
+      return spellTens(current.digit, previous.digit);
     case "hundreds":
-      return join(false, translateHundreds(current.digit), acc);
+      return join(false, spellHundreds(current.digit), acc);
     case "thousands":
       return join(
         previous.digit !== 0 && previous.units === "hundreds",
-        translateThousands(current.digit),
+        spellThousands(current.digit),
         acc
       );
   }
@@ -104,7 +103,7 @@ const join = (useSpace: boolean, x: string, y: string) =>
 
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-const translateUnit = (x: Digit, showZero: boolean): string => {
+const spellUnit = (x: Digit, showZero: boolean): string => {
   switch (x) {
     case 0:
       return showZero ? "zero" : "";
@@ -154,31 +153,31 @@ const tensToLetters_ = (digit: Digit): string => {
   }
 };
 
-const translateTens = (x: Digit, y: Digit): string => {
+const spellTens = (x: Digit, y: Digit): string => {
   switch (x) {
     case 0:
       return "";
     case 1:
       return tensToLetters_(y);
     case 2:
-      return y == 0 ? "twenty" : `twenty-${translateUnit(y, false)}`;
+      return y == 0 ? "twenty" : `twenty-${spellUnit(y, false)}`;
     case 3:
-      return y == 0 ? "thirty" : `thirty-${translateUnit(y, false)}`;
+      return y == 0 ? "thirty" : `thirty-${spellUnit(y, false)}`;
     case 4:
-      return y == 0 ? "fourty" : `fourty-${translateUnit(y, false)}`;
+      return y == 0 ? "fourty" : `fourty-${spellUnit(y, false)}`;
     case 5:
-      return y == 0 ? "fifty" : `fifty-${translateUnit(y, false)}`;
+      return y == 0 ? "fifty" : `fifty-${spellUnit(y, false)}`;
     case 6:
-      return y == 0 ? "sixty" : `sixty-${translateUnit(y, false)}`;
+      return y == 0 ? "sixty" : `sixty-${spellUnit(y, false)}`;
     case 7:
-      return y == 0 ? "seventy" : `seventy-${translateUnit(y, false)}`;
+      return y == 0 ? "seventy" : `seventy-${spellUnit(y, false)}`;
     case 8:
-      return y == 0 ? "eighty" : `eighty-${translateUnit(y, false)}`;
+      return y == 0 ? "eighty" : `eighty-${spellUnit(y, false)}`;
     case 9:
-      return y == 0 ? "ninety" : `ninety-${translateUnit(y, false)}`;
+      return y == 0 ? "ninety" : `ninety-${spellUnit(y, false)}`;
   }
 };
-const translateHundreds = (digit: Digit): string =>
-  digit === 0 ? "" : `${translateUnit(digit, false)} hundred`;
-const translateThousands = (digit: Digit): string =>
-  digit === 0 ? "" : `${translateUnit(digit, false)} thousand`;
+const spellHundreds = (digit: Digit): string =>
+  digit === 0 ? "" : `${spellUnit(digit, false)} hundred`;
+const spellThousands = (digit: Digit): string =>
+  digit === 0 ? "" : `${spellUnit(digit, false)} thousand`;

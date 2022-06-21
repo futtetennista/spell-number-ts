@@ -1,7 +1,7 @@
 import { APIGatewayEvent, Context, Callback, ProxyResult } from "aws-lambda";
 
 // https://github.com/nodejs/node/issues/32103#issuecomment-595806356
-import translate from "./app.js";
+import spellNumber from "./app.js";
 
 // The event type if the lambda is not behind an API gateway
 type RawEvent = { number: string | number };
@@ -45,7 +45,7 @@ export const handler = (
     };
     callback(null, response);
   } else {
-    const result = translate({ low: 1, up: 1000 }, input.toString());
+    const result = spellNumber({ low: 1, up: 1000 }, input.toString());
     switch (result.type) {
       case "error": {
         const response = {
