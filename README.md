@@ -32,7 +32,8 @@ See also: https://hub.docker.com/r/amazon/aws-lambda-nodejs.
 
 - setup AWS either with AWS CLI or by providing the necessary
   environment variables by renaming `.envrc.template` to `.envrc` and
-  entering your credentials
+  entering your credentials. By leveraging `direnv` those environment variables
+  will be set up for you when you enter the folder.
 - [setup pulumi](https://www.pulumi.com/registry/packages/aws/installation-configuration/) to
   work with AWS
 
@@ -66,13 +67,26 @@ $ pulumi up
 # Test the lambda function
 $ curl "https://<some-random-subdomain>.lambda-url.eu-west-1.on.aws" -d '{"number": "99"}'
 ```
+## Using the live API
+
+There's an API deployed on AWS Lambda reachable at `https://3aorw4lzp6nyoug4rgdsryoe3e0ikaof.lambda-url.eu-west-1.on.aws`
+and you can try it using `curl`
+
+```bash
+curl https://3aorw4lzp6nyoug4rgdsryoe3e0ikaof.lambda-url.eu-west-1.on.aws -d '{"number":"123"}
+'
+>>> {"result":"one hundred and twenty-three"}
+```
 
 ## Request
+
+The API supports numbers
 
 ```json
 { "number": 1000 }
 ```
-or
+or string
+
 ```json
 { "number": "1000" }
 ```

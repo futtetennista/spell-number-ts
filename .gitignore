@@ -10,6 +10,6 @@ bin
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-pulumi/.envrc
-pulumi/app/*.js
+.envrc
 .vscode
+docker/*.js
