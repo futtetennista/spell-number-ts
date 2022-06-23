@@ -1,5 +1,9 @@
 # README
 
+A simple command-line program that spells numbers from 0 to 1000. 
+
+A simple project meant to play around how modelling with Typescript compares with [Haskell](https://github.com/futtetennista/spell-number-hs).
+
 ## Build the code
 
 ```bash
@@ -30,11 +34,11 @@ See also: https://hub.docker.com/r/amazon/aws-lambda-nodejs.
 
 ## Deploy on AWS
 
-- setup AWS either with AWS CLI or by providing the necessary
+- Setup AWS either with AWS CLI or by providing the necessary
   environment variables by renaming `.envrc.template` to `.envrc` and
   entering your credentials. By leveraging `direnv` those environment variables
   will be set up for you when you enter the folder.
-- [setup pulumi](https://www.pulumi.com/registry/packages/aws/installation-configuration/) to
+- Setup [pulumi](https://www.pulumi.com/registry/packages/aws/installation-configuration/) to
   work with AWS
 
 ```bash
@@ -66,16 +70,6 @@ $ pulumi up
 
 # Test the lambda function
 $ curl "https://<some-random-subdomain>.lambda-url.eu-west-1.on.aws" -d '{"number": "99"}'
-```
-## Using the live API
-
-There's an API deployed on AWS Lambda reachable at `https://3aorw4lzp6nyoug4rgdsryoe3e0ikaof.lambda-url.eu-west-1.on.aws`
-and you can try it using `curl`
-
-```bash
-curl https://3aorw4lzp6nyoug4rgdsryoe3e0ikaof.lambda-url.eu-west-1.on.aws -d '{"number":"123"}
-'
->>> {"result":"one hundred and twenty-three"}
 ```
 
 ## Request
